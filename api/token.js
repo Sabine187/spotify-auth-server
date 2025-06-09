@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -7,8 +7,10 @@ export default async function handler(req, res) {
     return;
   }
 
-  // Rest vom Code...
-  const { code, code_verifier, redirect_uri } = req.body;
+  let body = req.body;
+  if (typeof body === "string") body = JSON.parse(body);
+
+  const { code, code_verifier, redirect_uri } = body;
 
   const params = new URLSearchParams();
   params.append("client_id", "9fb9db7417034d34971b1defb719cdc8");
@@ -27,4 +29,4 @@ export default async function handler(req, res) {
 
   const data = await result.json();
   res.status(200).json(data);
-}
+};
